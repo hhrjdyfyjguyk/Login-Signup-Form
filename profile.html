@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        .user-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        .info-value {
+            color: #333;
+        }
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        .welcome-text {
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="avatar" id="userAvatar">U</div>
+            <h2 id="welcomeTitle">欢迎回来！</h2>
+            <p class="welcome-text">这是您的个人中心页面</p>
+        </div>
+
+        <div class="user-info">
+            <div class="info-item">
+                <span class="info-label">用户名：</span>
+                <span class="info-value" id="displayName">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">邮箱：</span>
+                <span class="info-value" id="displayEmail">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">用户ID：</span>
+                <span class="info-value" id="displayId">-</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">登录状态：</span>
+                <span class="info-value" style="color: #28a745;">已登录</span>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">退出登录</button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function initProfile() {
+            const currentUser = getCurrentUser();
+
+            if (!currentUser) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            document.getElementById("displayName").textContent = currentUser.name;
+            document.getElementById("displayEmail").textContent = currentUser.email;
+            document.getElementById("displayId").textContent = currentUser.id;
+            document.getElementById("welcomeTitle").textContent = `欢迎回来，${currentUser.name}！`;
+
+            const avatar = document.getElementById("userAvatar");
+            avatar.textContent = currentUser.name.charAt(0).toUpperCase();
+        }
+
+        function logout() {
+            clearCurrentUser();
+            window.location.href = "index.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", initProfile);
+    </script>
+</body>
+</html>
