@@ -28,6 +28,7 @@ body {
 h2 {
   text-align: center;
   margin-bottom: 20px;
+  color: #042453;
 }
 
 .input-group {
@@ -38,6 +39,7 @@ h2 {
   display: block;
   font-size: 14px;
   margin-bottom: 5px;
+  color: #333;
 }
 
 .input-group input {
@@ -46,14 +48,20 @@ h2 {
   border-radius: 6px;
   border: 1px solid #ccc;
   outline: none;
+  transition: border-color 0.3s ease;
 }
 
 .input-group input:focus {
   border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.input-group input.error-input {
+  border-color: #ef4444;
 }
 
 .error {
-  color: red;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 5px;
   display: none;
@@ -68,6 +76,7 @@ button {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -78,6 +87,7 @@ button:hover {
   text-align: center;
   margin-top: 15px;
   font-size: 14px;
+  color: #666;
 }
 
 .toggle-link {
@@ -85,13 +95,21 @@ button:hover {
   cursor: pointer;
   font-weight: bold;
   margin-left: 5px;
+  transition: color 0.3s ease;
+}
+
+.toggle-link:hover {
+  color: #4338ca;
 }
 
 .success {
   text-align: center;
-  color: green;
+  color: #10b981;
   margin-top: 10px;
   display: none;
+  padding: 10px;
+  background: #d1fae5;
+  border-radius: 6px;
 }
 
 .password-toggle {
@@ -100,8 +118,74 @@ button:hover {
   cursor: pointer;
   margin-top: 5px;
   display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: #4338ca;
 }
 
 #nameGroup {
   display: none;
+}
+
+/* Profile Section Styles */
+.profile-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.profile-avatar span {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.profile-info h3 {
+  color: #042453;
+  margin-bottom: 5px;
+}
+
+.profile-info p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+#logoutBtn {
+  background: #ef4444;
+}
+
+#logoutBtn:hover {
+  background: #dc2626;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
 }

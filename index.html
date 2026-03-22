@@ -10,34 +10,52 @@
 
 <body>
     <div class="container">
-        <h2 id="formTitle">Login</h2>
-        <form action="" id="authForm">
-            <div class="input-group" id="nameGroup">
-                <label>Full Name</label>
-                <input type="text" id="name" placeholder="Enter your full name" />
-                <div class="error" id="nameError">Name is required</div>
-            </div>
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" id="email" />
-                <div class="error" id="emailError">Enter a valid email</div>
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="password" />
-                <span class="password-toggle" onclick="togglePassword()">Show Password</span>
-                <div class="error" id="passwordError">
-                    Password must be at least 6 characters
+        <!-- Authentication Form -->
+        <div id="authContainer">
+            <h2 id="formTitle">Login</h2>
+            <form action="" id="authForm">
+                <div class="input-group" id="nameGroup">
+                    <label>Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your full name" />
+                    <div class="error" id="nameError">Name must be at least 2 characters</div>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" />
+                    <div class="error" id="emailError">Please enter a valid email address</div>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" />
+                    <span class="password-toggle" onclick="togglePassword()">Show Password</span>
+                    <div class="error" id="passwordError">
+                        Password must be at least 6 characters
+                    </div>
                 </div>
                 <button type="submit" id="submitBtn">Login</button>
+                <div class="success" id="successMsg"></div>
+            </form>
+            <div class="toggle">
+                <span id="toggleText">Don't have an account?</span>
+                <span class="toggle-link" id="toggleLink" onclick="toggleForm()">Sign Up</span>
+            </div>
+        </div>
 
-      <div class="success" id="successMsg"></div>
-        </form>
-         <div class="toggle">
-      <span id="toggleText">Don't have an account?</span>
-      <span class="toggle-link" id="toggleLink" onclick="toggleForm()">Sign Up</span>
+        <!-- Profile Section -->
+        <div id="profileContainer" style="display: none;">
+            <h2>Welcome Back!</h2>
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <span id="avatarInitial">U</span>
+                </div>
+                <div class="profile-info">
+                    <h3 id="profileName">Username</h3>
+                    <p id="profileEmail">user@example.com</p>
+                </div>
+            </div>
+            <button id="logoutBtn">Logout</button>
+        </div>
     </div>
-  </div>
 
     <script src="script.js"></script>
 </body>
