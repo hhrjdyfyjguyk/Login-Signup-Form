@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
 }
 
 body::-webkit-scrollbar {
@@ -14,167 +14,222 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #042453;
+  background: linear-gradient(135deg, #042453 0%, #1a365d 50%, #2c5282 100%);
 }
 
 .container {
   background: #ffffff;
   width: 380px;
   padding: 30px;
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }
 
 h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #042453;
+  color: #1a365d;
+  font-weight: 600;
 }
 
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .input-group label {
   display: block;
   font-size: 14px;
-  margin-bottom: 5px;
-  color: #333;
+  margin-bottom: 8px;
+  color: #4a5568;
+  font-weight: 500;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
   outline: none;
-  transition: border-color 0.3s ease;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: #f8fafc;
 }
 
 .input-group input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #4299e1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
-.input-group input.error-input {
-  border-color: #ef4444;
+.input-group input::placeholder {
+  color: #a0aec0;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #4299e1;
+  cursor: pointer;
+  font-weight: 500;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.password-toggle:hover {
+  color: #2b6cb0;
 }
 
 .error {
-  color: #ef4444;
+  color: #e53e3e;
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 8px;
   display: none;
+  padding: 4px 8px;
+  background: #fff5f5;
+  border-radius: 4px;
+  border-left: 3px solid #e53e3e;
 }
 
 button {
   width: 100%;
-  padding: 12px;
-  background: #042453;
+  padding: 14px;
+  background: linear-gradient(135deg, #042453 0%, #2c5282 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(4, 36, 83, 0.3);
 }
 
 button:hover {
-  background: #4338ca;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(4, 36, 83, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 .toggle {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 20px;
   font-size: 14px;
-  color: #666;
+  color: #718096;
 }
 
 .toggle-link {
-  color: #4f46e5;
+  color: #4299e1;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
   margin-left: 5px;
-  transition: color 0.3s ease;
+  transition: color 0.2s;
 }
 
 .toggle-link:hover {
-  color: #4338ca;
+  color: #2b6cb0;
+  text-decoration: underline;
 }
 
 .success {
   text-align: center;
-  color: #10b981;
-  margin-top: 10px;
+  color: #38a169;
+  margin-top: 16px;
   display: none;
   padding: 10px;
-  background: #d1fae5;
-  border-radius: 6px;
-}
-
-.password-toggle {
-  font-size: 12px;
-  color: #4f46e5;
-  cursor: pointer;
-  margin-top: 5px;
-  display: inline-block;
-  transition: color 0.3s ease;
-}
-
-.password-toggle:hover {
-  color: #4338ca;
+  background: #f0fff4;
+  border-radius: 8px;
+  font-weight: 500;
 }
 
 #nameGroup {
   display: none;
 }
 
-/* Profile Section Styles */
-.profile-card {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  background: #f8fafc;
-  border-radius: 10px;
-  margin-bottom: 20px;
+/* 个人中心样式 */
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.profile-avatar {
-  width: 60px;
-  height: 60px;
+.avatar {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #042453 0%, #2c5282 100%);
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin-right: 15px;
+  align-items: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 12px rgba(4, 36, 83, 0.3);
 }
 
-.profile-avatar span {
+.avatar span {
   color: white;
+  font-size: 32px;
+  font-weight: 700;
+  user-select: none;
+}
+
+.welcome-text {
   font-size: 24px;
-  font-weight: bold;
+  color: #1a365d;
+  margin: 0;
 }
 
-.profile-info h3 {
-  color: #042453;
-  margin-bottom: 5px;
+.profile-info {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
 }
 
-.profile-info p {
-  color: #64748b;
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #718096;
   font-size: 14px;
 }
 
-#logoutBtn {
-  background: #ef4444;
+.info-value {
+  color: #2d3748;
+  font-weight: 600;
+  font-size: 14px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-#logoutBtn:hover {
-  background: #dc2626;
+.logout-btn {
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
 }
 
-/* Animation */
+.logout-btn:hover {
+  box-shadow: 0 6px 16px rgba(229, 62, 62, 0.4);
+}
+
+/* 动画效果 */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -188,4 +243,12 @@ button:hover {
 
 .fade-in {
   animation: fadeIn 0.3s ease;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .container {
+    width: 92%;
+    padding: 24px;
+  }
 }
