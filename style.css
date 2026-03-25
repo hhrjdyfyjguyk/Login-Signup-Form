@@ -105,3 +105,30 @@ button:hover {
 #nameGroup {
   display: none;
 }
+
+.profile {
+  text-align: center;
+}
+
+.profile-info {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.profile-info p {
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #333;
+}
+
+.profile-info p:last-child {
+  margin-bottom: 0;
+}
+
+.profile-info strong {
+  color: #042453;
+  margin-right: 8px;
+}
