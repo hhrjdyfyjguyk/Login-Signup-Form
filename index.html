@@ -1,43 +1,78 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login & Sign Up Form</title>
+    <title>登录 & 注册系统</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
     <div class="container">
-        <h2 id="formTitle">Login</h2>
-        <form action="" id="authForm">
-            <div class="input-group" id="nameGroup">
-                <label>Full Name</label>
-                <input type="text" id="name" placeholder="Enter your full name" />
-                <div class="error" id="nameError">Name is required</div>
-            </div>
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" id="email" />
-                <div class="error" id="emailError">Enter a valid email</div>
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="password" />
-                <span class="password-toggle" onclick="togglePassword()">Show Password</span>
-                <div class="error" id="passwordError">
-                    Password must be at least 6 characters
+        <!-- 认证表单区域 -->
+        <div id="authContainer">
+            <h2 id="formTitle">登录</h2>
+            <form id="authForm">
+                <div class="input-group" id="nameGroup">
+                    <label>用户名</label>
+                    <input type="text" id="name" placeholder="请输入用户名" autocomplete="username" />
+                    <div class="error" id="nameError">用户名至少需要2个字符</div>
                 </div>
-                <button type="submit" id="submitBtn">Login</button>
+                <div class="input-group">
+                    <label>邮箱</label>
+                    <input type="email" id="email" placeholder="请输入邮箱地址" autocomplete="email" />
+                    <div class="error" id="emailError">请输入有效的邮箱地址</div>
+                </div>
+                <div class="input-group">
+                    <label>密码</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="请输入密码" autocomplete="current-password" />
+                        <span class="password-toggle" onclick="togglePassword()">
+                            <span id="toggleTextIcon">显示</span>
+                        </span>
+                    </div>
+                    <div class="error" id="passwordError">密码至少需要6个字符</div>
+                </div>
+                <div class="input-group" id="confirmPasswordGroup" style="display: none;">
+                    <label>确认密码</label>
+                    <input type="password" id="confirmPassword" placeholder="请再次输入密码" autocomplete="new-password" />
+                    <div class="error" id="confirmPasswordError">两次输入的密码不一致</div>
+                </div>
+                <button type="submit" id="submitBtn">登录</button>
+                <div class="success" id="successMsg"></div>
+            </form>
+            <div class="toggle">
+                <span id="toggleText">还没有账号?</span>
+                <span class="toggle-link" id="toggleLink" onclick="toggleForm()">立即注册</span>
+            </div>
+        </div>
 
-      <div class="success" id="successMsg"></div>
-        </form>
-         <div class="toggle">
-      <span id="toggleText">Don't have an account?</span>
-      <span class="toggle-link" id="toggleLink" onclick="toggleForm()">Sign Up</span>
+        <!-- 个人中心区域 -->
+        <div id="profileContainer" style="display: none;">
+            <div class="profile-header">
+                <div class="avatar">
+                    <span id="avatarInitial">U</span>
+                </div>
+                <h2 class="welcome-text">欢迎回来!</h2>
+            </div>
+            <div class="profile-info">
+                <div class="info-item">
+                    <span class="info-label">用户名:</span>
+                    <span class="info-value" id="profileName">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">邮箱:</span>
+                    <span class="info-value" id="profileEmail">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">注册时间:</span>
+                    <span class="info-value" id="profileCreatedAt">--</span>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">退出登录</button>
+        </div>
     </div>
-  </div>
 
     <script src="script.js"></script>
 </body>
