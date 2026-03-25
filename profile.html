@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人中心</title>
+    <title>个人中心 - Profile</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .profile-container {
@@ -14,45 +14,50 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .profile-header {
             text-align: center;
             margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
         }
-        .avatar {
+
+        .profile-avatar {
             width: 100px;
             height: 100px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
-            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            margin: 0 auto 15px;
             font-size: 40px;
+            color: white;
             font-weight: bold;
         }
-        .user-info {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
+
+        .profile-info {
             margin-bottom: 20px;
         }
+
         .info-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #e9ecef;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
-        .info-item:last-child {
-            border-bottom: none;
-        }
+
         .info-label {
             font-weight: bold;
             color: #666;
         }
+
         .info-value {
             color: #333;
         }
+
         .logout-btn {
             width: 100%;
             padding: 12px;
@@ -62,72 +67,166 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            transition: background 0.3s;
+            margin-top: 20px;
         }
+
         .logout-btn:hover {
             background: #c82333;
         }
-        .welcome-text {
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .session-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 8px;
+            font-size: 14px;
             color: #666;
-            margin-top: 10px;
+        }
+
+        .not-logged-in {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .login-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="avatar" id="userAvatar">U</div>
-            <h2 id="welcomeTitle">欢迎回来！</h2>
-            <p class="welcome-text">这是您的个人中心页面</p>
-        </div>
-
-        <div class="user-info">
-            <div class="info-item">
-                <span class="info-label">用户名：</span>
-                <span class="info-value" id="displayName">-</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">邮箱：</span>
-                <span class="info-value" id="displayEmail">-</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">用户ID：</span>
-                <span class="info-value" id="displayId">-</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">登录状态：</span>
-                <span class="info-value" style="color: #28a745;">已登录</span>
-            </div>
-        </div>
-
-        <button class="logout-btn" onclick="logout()">退出登录</button>
+    <div class="profile-container" id="profileContainer">
+        <!-- 内容将通过JavaScript动态加载 -->
     </div>
 
-    <script src="script.js"></script>
     <script>
-        function initProfile() {
-            const currentUser = getCurrentUser();
+        // 存储键名常量（与script.js保持一致）
+        const STORAGE_KEYS = {
+            USERS: "auth_users",
+            SESSION: "auth_session",
+            CURRENT_USER: "current_user"
+        };
 
-            if (!currentUser) {
-                window.location.href = "index.html";
+        // 获取会话
+        function getSession() {
+            const session = localStorage.getItem(STORAGE_KEYS.SESSION);
+            return session ? JSON.parse(session) : null;
+        }
+
+        // 获取当前用户
+        function getCurrentUser() {
+            const user = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+            return user ? JSON.parse(user) : null;
+        }
+
+        // 清除会话
+        function clearSession() {
+            localStorage.removeItem(STORAGE_KEYS.SESSION);
+            localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // 检查登录状态并显示内容
+        function initProfile() {
+            const container = document.getElementById('profileContainer');
+            const session = getSession();
+            const user = getCurrentUser();
+
+            // 检查是否已登录且会话未过期
+            if (!session || !session.isLoggedIn || session.expiresAt <= Date.now() || !user) {
+                // 未登录或会话已过期
+                container.innerHTML = `
+                    <div class="not-logged-in">
+                        <h2>未登录</h2>
+                        <p>请先登录以查看个人中心</p>
+                        <a href="index.html" class="login-link">前往登录</a>
+                    </div>
+                `;
                 return;
             }
 
-            document.getElementById("displayName").textContent = currentUser.name;
-            document.getElementById("displayEmail").textContent = currentUser.email;
-            document.getElementById("displayId").textContent = currentUser.id;
-            document.getElementById("welcomeTitle").textContent = `欢迎回来，${currentUser.name}！`;
+            // 计算会话剩余时间
+            const remainingTime = Math.ceil((session.expiresAt - Date.now()) / (1000 * 60 * 60));
+            const loginTime = formatDate(session.loginTime);
 
-            const avatar = document.getElementById("userAvatar");
-            avatar.textContent = currentUser.name.charAt(0).toUpperCase();
+            // 显示用户信息
+            const firstLetter = user.name.charAt(0).toUpperCase();
+            
+            container.innerHTML = `
+                <a href="index.html" class="back-btn">← 返回首页</a>
+                
+                <div class="profile-header">
+                    <div class="profile-avatar">${firstLetter}</div>
+                    <h2>欢迎回来，${user.name}</h2>
+                    <p style="color: #666;">个人中心</p>
+                </div>
+
+                <div class="profile-info">
+                    <div class="info-item">
+                        <span class="info-label">用户名</span>
+                        <span class="info-value">${user.name}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">邮箱</span>
+                        <span class="info-value">${user.email}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">用户ID</span>
+                        <span class="info-value">${user.id}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">注册时间</span>
+                        <span class="info-value">${formatDate(user.createdAt)}</span>
+                    </div>
+                </div>
+
+                <div class="session-info">
+                    <strong>会话信息</strong><br>
+                    登录时间：${loginTime}<br>
+                    会话将在约 ${remainingTime} 小时后过期
+                </div>
+
+                <button class="logout-btn" onclick="logout()">退出登录</button>
+            `;
         }
 
+        // 退出登录
         function logout() {
-            clearCurrentUser();
-            window.location.href = "index.html";
+            if (confirm('确定要退出登录吗？')) {
+                clearSession();
+                window.location.href = 'index.html';
+            }
         }
 
-        document.addEventListener("DOMContentLoaded", initProfile);
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', initProfile);
     </script>
 </body>
 </html>
