@@ -19,37 +19,25 @@
             </div>
             <div class="input-group">
                 <label>Email</label>
-                <input type="email" id="email" placeholder="Enter your email" />
+                <input type="email" id="email" />
                 <div class="error" id="emailError">Enter a valid email</div>
             </div>
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="password" placeholder="Enter your password" />
-                <span class="password-toggle" onclick="togglePassword('password')">Show Password</span>
+                <input type="password" id="password" />
+                <span class="password-toggle" onclick="togglePassword()">Show Password</span>
                 <div class="error" id="passwordError">
-                    Password must be at least 6 characters with letters and numbers
+                    Password must be at least 6 characters
                 </div>
-            </div>
-            <div class="input-group" id="confirmGroup">
-                <label>Confirm Password</label>
-                <input type="password" id="confirmPassword" placeholder="Confirm your password" />
-                <span class="password-toggle" onclick="togglePassword('confirmPassword')">Show Password</span>
-                <div class="error" id="confirmError">Passwords do not match</div>
-            </div>
-            <div class="input-group checkbox-group" id="rememberGroup">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="rememberMe" />
-                    <span>Remember me</span>
-                </label>
-            </div>
-            <button type="submit" id="submitBtn">Login</button>
-            <div class="success" id="successMsg"></div>
+                <button type="submit" id="submitBtn">Login</button>
+
+      <div class="success" id="successMsg"></div>
         </form>
-        <div class="toggle">
-            <span id="toggleText">Don't have an account?</span>
-            <span class="toggle-link" id="toggleLink" onclick="toggleForm()">Sign Up</span>
-        </div>
+         <div class="toggle">
+      <span id="toggleText">Don't have an account?</span>
+      <span class="toggle-link" id="toggleLink" onclick="toggleForm()">Sign Up</span>
     </div>
+  </div>
 
     <script src="script.js"></script>
 </body>

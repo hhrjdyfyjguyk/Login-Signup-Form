@@ -1,19 +1,20 @@
 const formTitle = document.getElementById("formTitle");
 const nameGroup = document.getElementById("nameGroup");
-const confirmGroup = document.getElementById("confirmGroup");
 const submitBtn = document.getElementById("submitBtn");
 const toggleText = document.getElementById("toggleText");
 const toggleLink = document.getElementById("toggleLink");
-const rememberMe = document.getElementById("rememberMe");
 
 const form = document.getElementById("authForm");
 const successMsg = document.getElementById("successMsg");
 
 let isSignup = false;
 
-const USERS_KEY = "users";
-const CURRENT_USER_KEY = "currentUser";
-const REMEMBER_ME_KEY = "rememberMe";
+/* ---------------- UTILITY FUNCTIONS ---------------- */
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
 
 function simpleHash(str) {
   let hash = 0;
@@ -25,54 +26,67 @@ function simpleHash(str) {
   return hash.toString(16);
 }
 
-function sanitizeInput(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 function getUsers() {
-  const users = localStorage.getItem(USERS_KEY);
+  const users = localStorage.getItem("users");
   return users ? JSON.parse(users) : [];
 }
 
 function saveUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+function getCurrentUser() {
+  const currentUser = localStorage.getItem("currentUser");
+  return currentUser ? JSON.parse(currentUser) : null;
+}
+
+function setCurrentUser(user) {
+  localStorage.setItem("currentUser", JSON.stringify(user));
+}
+
+function clearCurrentUser() {
+  localStorage.removeItem("currentUser");
 }
 
 function findUserByEmail(email) {
   const users = getUsers();
-  return users.find((user) => user.email === email.toLowerCase());
+  return users.find((u) => u.email === email);
 }
 
-function getCurrentUser() {
-  const user = localStorage.getItem(CURRENT_USER_KEY);
-  return user ? JSON.parse(user) : null;
-}
-
-function setCurrentUser(user) {
-  localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-}
-
-function clearCurrentUser() {
-  localStorage.removeItem(CURRENT_USER_KEY);
-}
-
-function checkAuthAndRedirect() {
+/* ---------------- CHECK LOGIN STATUS ---------------- */
+function checkLoginStatus() {
   const currentUser = getCurrentUser();
   if (currentUser) {
-    window.location.href = "profile.html";
+    showProfile(currentUser);
   }
 }
 
-function loadRememberedEmail() {
-  const remembered = localStorage.getItem(REMEMBER_ME_KEY);
-  if (remembered) {
-    document.getElementById("email").value = remembered;
-    if (rememberMe) rememberMe.checked = true;
-  }
+/* ---------------- SHOW PROFILE ---------------- */
+function showProfile(user) {
+  const container = document.querySelector(".container");
+  container.innerHTML = `
+    <div class="profile">
+      <h2>Personal Center</h2>
+      <div class="profile-info">
+        <p><strong>Name:</strong> ${escapeHtml(user.name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(user.email)}</p>
+      </div>
+      <button onclick="logout()">Logout</button>
+    </div>
+  `;
 }
 
+function logout() {
+  clearCurrentUser();
+  location.reload();
+}
+
+/* ---------------- TOGGLE FORM ---------------- */
 function toggleForm() {
   isSignup = !isSignup;
 
@@ -82,40 +96,26 @@ function toggleForm() {
     toggleText.innerText = "Already have an account?";
     toggleLink.innerText = "Login";
     nameGroup.style.display = "block";
-    if (confirmGroup) confirmGroup.style.display = "block";
   } else {
     formTitle.innerText = "Login";
     submitBtn.innerText = "Login";
     toggleText.innerText = "Don't have an account?";
     toggleLink.innerText = "Sign Up";
     nameGroup.style.display = "none";
-    if (confirmGroup) confirmGroup.style.display = "none";
   }
 
   clearErrors();
   successMsg.style.display = "none";
   form.reset();
-  if (!isSignup) {
-    loadRememberedEmail();
-  }
 }
 
-function togglePassword(inputId) {
-  const password = document.getElementById(inputId);
-  const toggleSpan = password.nextElementSibling;
-  if (password.type === "password") {
-    password.type = "text";
-    if (toggleSpan && toggleSpan.classList.contains("password-toggle")) {
-      toggleSpan.innerText = "Hide Password";
-    }
-  } else {
-    password.type = "password";
-    if (toggleSpan && toggleSpan.classList.contains("password-toggle")) {
-      toggleSpan.innerText = "Show Password";
-    }
-  }
+/* ---------------- SHOW / HIDE PASSWORD ---------------- */
+function togglePassword() {
+  const password = document.getElementById("password");
+  password.type = password.type === "password" ? "text" : "password";
 }
 
+/* ---------------- CLEAR ERRORS ---------------- */
 function clearErrors() {
   document.querySelectorAll(".error").forEach((err) => {
     err.style.display = "none";
@@ -125,32 +125,19 @@ function clearErrors() {
 function showError(elementId, message) {
   const errorElement = document.getElementById(elementId);
   if (errorElement) {
+    errorElement.textContent = message;
     errorElement.style.display = "block";
-    if (message) {
-      errorElement.innerText = message;
-    }
   }
 }
 
-function validateEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-function validatePassword(password) {
-  const hasLetter = /[a-zA-Z]/.test(password);
-  const hasNumber = /[0-9]/.test(password);
-  return password.length >= 6 && hasLetter && hasNumber;
-}
-
+/* ---------------- FORM SUBMIT ---------------- */
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   clearErrors();
 
-  const name = sanitizeInput(document.getElementById("name").value.trim());
-  const email = sanitizeInput(document.getElementById("email").value.trim().toLowerCase());
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim().toLowerCase();
   const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword")?.value;
 
   let isValid = true;
 
@@ -159,25 +146,25 @@ form.addEventListener("submit", function (e) {
     isValid = false;
   }
 
-  if (!validateEmail(email)) {
-    showError("emailError", "Enter a valid email address");
+  if (email === "") {
+    showError("emailError", "Email is required");
+    isValid = false;
+  } else if (!validateEmail(email)) {
+    showError("emailError", "Please enter a valid email address");
     isValid = false;
   }
 
-  if (!validatePassword(password)) {
-    showError("passwordError", "Password must be at least 6 characters with letters and numbers");
+  if (password === "") {
+    showError("passwordError", "Password is required");
     isValid = false;
-  }
-
-  if (isSignup && confirmPassword !== undefined) {
-    if (confirmPassword !== password) {
-      showError("confirmError", "Passwords do not match");
-      isValid = false;
-    }
+  } else if (password.length < 6) {
+    showError("passwordError", "Password must be at least 6 characters");
+    isValid = false;
   }
 
   if (!isValid) return;
 
+  /* -------- SIGN UP LOGIC -------- */
   if (isSignup) {
     const existingUser = findUserByEmail(email);
     if (existingUser) {
@@ -188,7 +175,7 @@ form.addEventListener("submit", function (e) {
     const hashedPassword = simpleHash(password);
     const newUser = {
       id: Date.now().toString(),
-      name: name,
+      name: escapeHtml(name),
       email: email,
       password: hashedPassword,
       createdAt: new Date().toISOString(),
@@ -200,52 +187,37 @@ form.addEventListener("submit", function (e) {
 
     successMsg.style.display = "block";
     successMsg.innerText = "Signup successful! Please login now.";
-    successMsg.style.color = "green";
 
-    setTimeout(() => {
-      toggleForm();
-    }, 1500);
+    toggleForm();
     return;
   }
 
+  /* -------- LOGIN LOGIC -------- */
   const user = findUserByEmail(email);
+
   if (!user) {
-    showError("emailError", "No account found with this email");
+    alert("No account found with this email. Please sign up first.");
     return;
   }
 
   const hashedPassword = simpleHash(password);
-  if (user.password !== hashedPassword) {
-    showError("passwordError", "Incorrect password");
-    return;
-  }
+  if (hashedPassword === user.password) {
+    setCurrentUser({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
 
-  if (rememberMe && rememberMe.checked) {
-    localStorage.setItem(REMEMBER_ME_KEY, email);
+    successMsg.style.display = "block";
+    successMsg.innerText = `Welcome back, ${escapeHtml(user.name)}!`;
+    form.reset();
+
+    setTimeout(() => {
+      showProfile(user);
+    }, 1000);
   } else {
-    localStorage.removeItem(REMEMBER_ME_KEY);
-  }
-
-  const sessionUser = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    loginAt: new Date().toISOString(),
-  };
-  setCurrentUser(sessionUser);
-
-  successMsg.style.display = "block";
-  successMsg.innerText = `Welcome back, ${user.name}! Redirecting...`;
-  successMsg.style.color = "green";
-
-  setTimeout(() => {
-    window.location.href = "profile.html";
-  }, 1000);
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  checkAuthAndRedirect();
-  if (!isSignup) {
-    loadRememberedEmail();
+    alert("Invalid email or password");
   }
 });
+
+document.addEventListener("DOMContentLoaded", checkLoginStatus);
